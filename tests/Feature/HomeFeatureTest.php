@@ -26,7 +26,7 @@ class HomeFeatureTest extends TestCase
 
         $response->assertSuccessful();
         $response->assertViewIs('home');
-        
+
         foreach ($activities as $activity) {
             $response->assertSee($activity->title);
         }
@@ -39,7 +39,7 @@ class HomeFeatureTest extends TestCase
 
         $activity = CreativeActivity::factory()->create();
         $masterClass = MasterClass::factory()->for($activity, 'activity')->create([
-            'title' => 'My Test Masterclass'
+            'title' => 'My Test Masterclass',
         ]);
 
         Enrollment::factory()->for($user)->for($masterClass)->create();

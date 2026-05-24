@@ -2,34 +2,72 @@ name: Laravel
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master", "dev", "uat"]
   pull_request:
-    branches: [ "master" ]
+    branches: ["master", "dev", "uat"]
 
 jobs:
-  laravel-tests:
-
+  ci-checks:
+    name: "Тестирование, Линтинг, Статический анализ кода, Симуляция деплоя"
     runs-on: ubuntu-latest
 
     steps:
-    - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
-      with:
-        php-version: '8.0'
-    - uses: actions/checkout@v4
-    - name: Copy .env
-      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-    - name: Install Dependencies
-      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-    - name: Generate key
-      run: php artisan key:generate
-    - name: Directory Permissions
-      run: chmod -R 777 storage bootstrap/cache
-    - name: Create Database
-      run: |
-        mkdir -p database
-        touch database/database.sqlite
-    - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
-      env:
-        DB_CONNECTION: sqlite
-        DB_DATABASE: database/database.sqlite
-      run: php artisan test
+      - name: Проверка кода
+        uses: actions/checkout@v4
+
+      - name: Установка PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          coverage: pcov
+          tools: composer:v2
+
+      - name: Копирование .env.ci
+        run: php -r "file_exists('.env') || copy('.env.ci', '.env');"
+
+      - name: Установка зависимостей
+        run: composer i
+
+      - name: Генерация APP_KEY
+        run: php artisan key:generate
+
+      - name: Права доступа к каталогам
+        run: chmod -R 777 storage bootstrap/cache
+
+      - name: Запуск тестов с coverage-min=50%
+        run: php artisan test --coverage --min=50
+
+      - name: Статически анализ кода (php-stan)
+        run: vendor/bin/phpstan analyse --error-format=github
+
+      - name: Линтинг кода
+        run: vendor/bin/pint --test
+
+  simulate-deploy:
+    name: Симуляция деполя
+    needs: ci-checks
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.ref == 'refs/heads/master' && 'reviewer-env' || ''}}
+    steps:
+      - name: Проверка кода
+        uses: actions/checkout@v4
+
+      - name: Симуляция деплоя
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/dev" ]
+            then ENV_NAME="dev"
+              cp .env.dev .env
+          elif [ "${{ github.ref }}" == "refs/heads/uat" ];
+            then ENV_NAME="uat"
+              cp .env.uat .env
+          elif [ "${{ github.ref }}" == "refs/heads/master" ]
+            then ENV_NAME="prod"
+              cp .env.prod .env
+          else
+            echo "Ветка не настроена для развёртывания!"
+            exit 0
+          fi
+
+          echo "Деплоим в ${ENV_NAME} с .env.${ENV_NAME}"
+          # ...

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\MasterClass;
 use App\Models\Enrollment;
+use App\Models\MasterClass;
+use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
-use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class EnrollmentController extends Controller
@@ -27,7 +27,7 @@ class EnrollmentController extends Controller
             abort(403);
         }
 
-        $startTime = \Carbon\Carbon::parse($masterClass->date . ' ' . explode('-', $masterClass->time_slot)[0]);
+        $startTime = Carbon::parse($masterClass->date.' '.explode('-', $masterClass->time_slot)[0]);
         if ($startTime->isPast()) {
             return redirect()->route('activity.show', $masterClass->activity_id)
                 ->withErrors(['error' => 'Запись на прошедший мастер-класс невозможна.']);
