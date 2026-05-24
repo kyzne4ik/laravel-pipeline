@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Models\MasterClass;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 
@@ -12,12 +13,12 @@ class MasterClassTest extends TestCase
     {
         $masterClass = Mockery::mock(MasterClass::class)->makePartial();
         $masterClass->capacity = 10;
-        
-        $enrollmentsMock = Mockery::mock(\Illuminate\Database\Eloquent\Relations\HasMany::class);
+
+        $enrollmentsMock = Mockery::mock(HasMany::class);
         $enrollmentsMock->shouldReceive('count')->andReturn(3);
-        
+
         $masterClass->shouldReceive('enrollments')->andReturn($enrollmentsMock);
-        
+
         $this->assertEquals(7, $masterClass->available_spots);
     }
 }

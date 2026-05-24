@@ -2,12 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Models\CreativeActivity;
 use App\Models\MasterClass;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-
-use App\Models\CreativeActivity;
 
 class DatabaseSeeder extends Seeder
 {
@@ -30,7 +29,7 @@ class DatabaseSeeder extends Seeder
             'phone' => '89007776655',
             'photo_path' => 'img/driver-page.png',
         ]);
-        
+
         User::create([
             'name' => 'Посетитель',
             'email' => 'visitor@example.com',

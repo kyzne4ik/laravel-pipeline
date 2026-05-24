@@ -1,13 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-
-use App\Http\Controllers\MasterClassController;
-
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EnrollmentController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MasterClassController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/activity/{activity}', [ActivityController::class, 'show'])->name('activity.show');
@@ -21,7 +19,7 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    
+
     Route::get('/cabinet', [MasterClassController::class, 'index'])->name('cabinet');
     Route::get('/master-classes/create', [MasterClassController::class, 'create'])->name('master-classes.create');
     Route::post('/master-classes', [MasterClassController::class, 'store'])->name('master-classes.store');
@@ -31,6 +29,3 @@ Route::middleware('auth')->group(function () {
     Route::get('/enroll/{masterClass}', [EnrollmentController::class, 'confirm'])->name('enrollment.confirm');
     Route::post('/enroll/{masterClass}', [EnrollmentController::class, 'store'])->name('enrollment.store');
 });
-
-
-

@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\CreativeActivity;
 use App\Models\Enrollment;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -27,4 +25,3 @@ class HomeController extends Controller
         return view('home', compact('activities', 'enrolledClasses'));
     }
 }
-
