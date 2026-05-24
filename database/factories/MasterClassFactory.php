@@ -2,9 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\CreativeActivity;
 use App\Models\MasterClass;
 use App\Models\User;
-use App\Models\CreativeActivity;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->integer('capacity');
             $table->decimal('cost', 8, 2);
             $table->timestamps();
-            
+
             $table->unique(['date', 'time_slot']); // Prevent overlapping across any rooms/instructors based on FR-008
         });
     }

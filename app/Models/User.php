@@ -3,10 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -28,17 +28,17 @@ class User extends Authenticatable
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<MasterClass, $this>
+     * @return HasMany<MasterClass, $this>
      */
-    public function masterClasses(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function masterClasses(): HasMany
     {
         return $this->hasMany(MasterClass::class, 'instructor_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Enrollment, $this>
+     * @return HasMany<Enrollment, $this>
      */
-    public function enrollments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function enrollments(): HasMany
     {
         return $this->hasMany(Enrollment::class);
     }

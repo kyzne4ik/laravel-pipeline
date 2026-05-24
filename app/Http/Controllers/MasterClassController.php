@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\MasterClass;
 use App\Models\CreativeActivity;
+use App\Models\MasterClass;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
-use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class MasterClassController extends Controller
@@ -20,7 +19,7 @@ class MasterClassController extends Controller
         }
 
         $masterClasses = MasterClass::where('instructor_id', $user->id)
-            ->with(['activity', 'enrollments.user']) 
+            ->with(['activity', 'enrollments.user'])
             ->orderBy('date')
             ->orderBy('time_slot')
             ->get();
@@ -35,7 +34,7 @@ class MasterClassController extends Controller
         }
 
         $activities = CreativeActivity::all();
-        
+
         $busySlots = MasterClass::select('date', 'time_slot')
             ->get()
             ->groupBy('date')

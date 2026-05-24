@@ -116,7 +116,7 @@ class MasterClassFeatureTest extends TestCase
     {
         $instructor1 = User::factory()->instructor()->create();
         $instructor2 = User::factory()->instructor()->create();
-        
+
         $this->actingAs($instructor1);
 
         $masterClass = MasterClass::factory()->for($instructor2, 'instructor')->create();
