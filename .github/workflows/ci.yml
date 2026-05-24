@@ -71,3 +71,19 @@ jobs:
 
           echo "Деплоим в ${ENV_NAME} с .env.${ENV_NAME}"
           # ...
+      - name: Отправка Уведомление в телеграмм
+        uses: appleboy/telegram-action@master
+        if: always()
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          format: markdown
+          message: |
+            *Пайплайн завершен!*
+            **Репозиторий:** ${{ github.repository }}
+            **Ветка:** ${{ github.ref_name }}
+            Автор коммита: ${{ github.actor }}
+            **Статус:** ${{ job.status == 'success' && 'Успешно' || 'Ошибка' }}
+            [Посмотреть логи](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          
+     
