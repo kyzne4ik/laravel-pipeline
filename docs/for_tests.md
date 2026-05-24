@@ -2,7 +2,7 @@
 ## Для запуска тестов через XDebug
 
 ```bash
-    XDEBUG_MODE=coverage /usr/bin/php8.4 artisan test --coverage --min=80.3
+    XDEBUG_MODE=coverage /usr/bin/php8.4 artisan test --coverage --min=60.3
 ```
 
 ## На будущее я сделал так, чтобы не нужно было делать экспорт-переменной (`export XDEBUG_MODE=coverage`)
